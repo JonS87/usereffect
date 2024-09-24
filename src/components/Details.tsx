@@ -9,6 +9,8 @@ interface DetailsProps {
 }
 
 const Details: React.FC<DetailsProps> = ({ info }) => {
+  const url = info ? `${import.meta.env.VITE_USER_DETAILS_URL}${info.id}.json` : null;
+
   const { data, loading, error } = useFetch<{
     avatar: string;
     details: {
@@ -16,13 +18,13 @@ const Details: React.FC<DetailsProps> = ({ info }) => {
       company: string;
       position: string;
     }
-  }>(
-    info ? `${import.meta.env.VITE_USER_DETAILS_URL}${info.id}.json` : ''
-  );
+  }>(url || '');
 
   if (!info) return null;
   if (loading) return <div>Загрузка...</div>;
-  if (error) return <div>Ошибка: {error}</div>;
+  if (error) {
+    console.log(`Ошибка: ${error}`);
+  }
 
   return (
     <div className={styles['details-container']}>
